@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!--Import Google Icon Font-->
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.6/css/materialize.min.css">
+
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title><%= date %> 基础规范检测</title>
+    <style>
+        .title {
+            font-size:28px;
+        }
+        .sub-title {
+            font-size: 22px;
+            line-height: 40px;
+            height: 40px;
+        }
+        .type-title {
+            font-size: 18px;
+            height: 40px;
+            line-height: 40px;
+        }
+        .type-area {
+            margin-bottom: 30px;
+        }
+        .detail-title {
+            font-size: 28px;
+            line-height: 50px;
+            height: 50px;
+        }
+        .item-error-num {
+            font-size:18px;
+            font-weight: bold;
+        }
+        .item-section {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body class="teal-text text-lighten-5">
+    <div class="teal lighten-3">
+        <nav>
+            <div class="row">
+                <div class="center-align col s12 title"><%= date %>规范检测</div>
+            </div>
+        </nav>
+        <div class="row">
+            <p class="sub-title offset-s4 center-align z-depth-2 col s4 purple lighten-1">不规范总数：<%= errorNum %></p>
+        </div>
+ 
+        <div class="container">
+            <% for (var i in stacks) { %>
+            <div class="container type-area">
+                <div class="row">
+                    <p class="z-depth-2 center-align offset-s4 type-title col s4 teal lighten-1"><%= i %> 不规范总数： <%= stacks[i].num %></p>
+                </div>
+                <table class="centered z-depth-2 pink lighten-1">
+                    <thead>
+                        <tr>
+                            <th>规则</th>
+                            <th>不规范数量</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <%for(var j in stacks[i].stack) {%>
+                        <tr>
+                            <td><%= j %></td>
+                            <td><%= stacks[i].stack[j] %></td>
+                        </tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+            <% } %>
+        </div>
+
+        <div class="row">
+            <div class="col s10 offset-s1">
+                <div class="progress purple lighten-3">
+                    <div class="indeterminate purple lighten-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-manage cyan darken-1">
+            <div class="row">
+                <p class="z-depth-2 center-align detail-title col s12 brown lighten-1">详细文件描述</p>
+            </div>
+            <%for(var i = 0; i < items.length; i++) {%>
+                <section class="item-section row">
+                    <h5 class="center-align yellow-text text-accent-4"><%= items[i].relative %></h5>
+                    <p class="item-error-num center-align amber-text text-accent-4">不规范数量：<%= items[i].errors.length %></p>
+                    <div class="row">
+                        <table class="col s10 offset-s1 blue-grey-text text-darken-4 centered deep-purple lighten-2 z-depth-2">
+                            <thead>
+                                <tr>
+                                    <th>行</th>
+                                    <th>列</th>
+                                    <th>严重程度</th>
+                                    <th>信息</th>
+                                    <th>规则</th>
+                                    <th>描述</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% for(var j = 0; j < items[i].errors.length; j += 1) { %>
+                                <tr>
+                                    <td><%= items[i].errors[j].line %></td>
+                                    <td><%= items[i].errors[j].column %></td>
+                                    <td>
+                                        <span
+                                        <% if (items[i].errors[j].severity >= 2){%>
+                                            class="red-text text-lighten-5"
+                                            <%}%>>
+                                            <%= items[i].errors[j].severity %>
+                                        </span>
+                                    </td>
+                                    <td><%= items[i].errors[j].message %></td>
+                                    <td><%= items[i].errors[j].rule %></td>
+                                    <td><%= items[i].errors[j].info %></td>
+                                </tr>
+                                <% } %>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            <% } %>
+        </div>
+    </div>
+</body>
+</html>
